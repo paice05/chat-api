@@ -1,17 +1,12 @@
 /**
  * @author Matheus Paice <matheus.ferreira@jbtec.com.br>
- * @description Model enviar mensagem
+ * @description Model conversas
  */
 
 module.exports = (Sequelize, DataType) => {
-  const Send = Sequelize.define(
-    'Send',
+  const Talk = Sequelize.define(
+    'Talk',
     {
-      //   id: {
-      //     type: Sequelize.INTEGER,
-      //     primaryKey: true,
-      //     autoIncrement: true,
-      //   },
       user: {
         type: DataType.INTEGER,
         // references: {
@@ -33,5 +28,5 @@ module.exports = (Sequelize, DataType) => {
     },
   );
 
-  return Send;
+  return Talk;
 };

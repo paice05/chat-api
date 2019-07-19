@@ -10,10 +10,14 @@ const cors = require('cors');
 const bodyParse = require('body-parser');
 const morgan = require('morgan');
 
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 const { sequelize } = require('./models');
 
 const userRoutes = require('./routes/user');
 const contactRoutes = require('./routes/contact');
+const talkRoutes = require('./routes/talk');
 
 const port = 3333;
 
@@ -30,8 +34,17 @@ app.use(bodyParse.json());
 
 app.use(userRoutes);
 app.use(contactRoutes);
+app.use(talkRoutes);
 
-app.listen(port, () => console.log('Server online in port: ', port));
+io.on('connect', (socket) => {
+  console.log(socket.id);
+});
+
+exports.sendMessage = (contact, message) => {
+  io.to(contact).emit('sendMessage', message);
+};
+
+server.listen(port, () => console.log('Server online in port: ', port));
 
 sequelize.sync().then(() => {
   // eslint-disable-next-line

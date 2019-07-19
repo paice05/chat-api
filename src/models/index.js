@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 
 const User = require('./user');
 const Contact = require('./contact');
+const Talk = require('./talk');
 
 /**
  * Inicialização da conexão com o banco de dados.
@@ -39,6 +40,7 @@ sequelize
 const models = {
   User: User(sequelize, Sequelize),
   Contact: Contact(sequelize, Sequelize),
+  Talk: Talk(sequelize, Sequelize),
 };
 
 /**
