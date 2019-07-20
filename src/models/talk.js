@@ -17,7 +17,7 @@ module.exports = (Sequelize, DataType) => {
       contact: {
         type: DataType.INTEGER,
         // references: {
-        //   model: User,
+        //   model: Contact,
         //   key: 'id',
         // },
       },
