@@ -8,12 +8,15 @@ const express = require('express');
 const router = express.Router();
 
 const { models } = require('../models');
+const auth = require('../middleware/auth');
 
-router.post('/addContact', async (req, res) => {
-  const { user, contact } = req.body;
+router.post('/addContact', auth, async (req, res) => {
+  const { contact } = req.body;
+  const { id } = req.tokenJwt;
 
   try {
-    const isContact = await models.User.findOne({ where: { firstName: contact } });
+    const isContact = await models.User.findOne({ where: { id: contact } });
+
     if (!isContact) {
       return res.status(500).json({
         message: 'Error',
@@ -22,8 +25,13 @@ router.post('/addContact', async (req, res) => {
     }
 
     const newContact = await models.Contact.create({
-      user,
+      user: id,
       contact: isContact.id,
+    });
+
+    await models.Contact.create({
+      user: isContact.id,
+      contact: id,
     });
 
     return res.status(200).json({
@@ -38,15 +46,22 @@ router.post('/addContact', async (req, res) => {
   }
 });
 
-router.get('/listContacts', async (req, res) => {
-  const { user } = req.query;
+router.get('/listContacts/:user', async (req, res) => {
+  const { user } = req.params;
 
   try {
     const listContacts = await models.Contact.findAll({ where: { user } });
 
+    const data = [];
+    for (let i = 0; i < listContacts.length; i += 1) {
+      const response = await models.User.findAll({ where: { id: listContacts[i].contact } });
+
+      data.push(...response);
+    }
+
     return res.status(200).json({
       message: 'OK',
-      data: listContacts,
+      data,
     });
   } catch (e) {
     return res.status(500).json({
