@@ -40,8 +40,8 @@ io.on('connect', (socket) => {
   console.log(socket.id);
 });
 
-exports.sendMessage = (contact, message) => {
-  io.to(contact).emit('sendMessage', message);
+exports.sendMessage = (message) => {
+  io.emit('sendMessage', message);
 };
 
 server.listen(port, () => console.log('Server online in port: ', port));

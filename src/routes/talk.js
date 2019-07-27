@@ -22,7 +22,7 @@ router.post('/talk', auth, async (req, res) => {
       message,
     });
 
-    socket.sendMessage(talk.id, talk.message);
+    socket.sendMessage(talk.message);
 
     return res.status(200).json({
       message: 'OK',
